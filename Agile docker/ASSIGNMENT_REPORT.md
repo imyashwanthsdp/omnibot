@@ -54,7 +54,7 @@ The application (`OmniBot`) is a full-stack Node.js/Express web application prov
    * Job Type: **Pipeline**
    * Definition: **Pipeline script from SCM**
    * SCM: **Git**
-   * Repository URL: `https://github.com/imyashwanthsdp/LunarApi-Framework.git`
+   * Repository URL: `https://github.com/imyashwanthsdp/omnibot.git`
    * Branch Specifier: `*/main`
    * Script Path: `Jenkinsfile`
 
@@ -164,7 +164,7 @@ pipeline {
 ==========================================
 STAGE 1: CHECKOUT SOURCE CODE FROM GITHUB
 ==========================================
-Cloning repository https://github.com/imyashwanthsdp/LunarApi-Framework.git
+Cloning repository https://github.com/imyashwanthsdp/omnibot.git
  > git checkout -f 4b8d1a2
 Branch: main
 Commit Hash: 4b8d1a2
