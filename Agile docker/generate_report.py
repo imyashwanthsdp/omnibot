@@ -1,3 +1,4 @@
+import os
 import docx
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -42,6 +43,25 @@ def add_styled_heading(doc, text, level):
         run.font.color.rgb = RGBColor(71, 85, 105) # Slate #475569
     return p
 
+def add_image_with_caption(doc, image_path, caption_text, width=Inches(5.8)):
+    if os.path.exists(image_path):
+        p_img = doc.add_paragraph()
+        p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_img.paragraph_format.space_before = Pt(8)
+        p_img.paragraph_format.space_after = Pt(2)
+        run_img = p_img.add_run()
+        run_img.add_picture(image_path, width=width)
+        
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.space_after = Pt(12)
+        r_cap = p_cap.add_run(f"Figure Evidence: {caption_text}")
+        r_cap.font.size = Pt(9.5)
+        r_cap.font.italic = True
+        r_cap.font.color.rgb = RGBColor(71, 85, 105)
+    else:
+        print(f"Warning: Image file missing at {image_path}")
+
 def add_code_block(doc, code_text):
     tbl = doc.add_table(rows=1, cols=1)
     tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -49,7 +69,6 @@ def add_code_block(doc, code_text):
     set_cell_background(cell, "F1F5F9") # Slate Light #f1f5f9
     set_cell_margins(cell, top=120, bottom=120, left=180, right=180)
     
-    # Border styling
     tcPr = cell._element.get_or_add_tcPr()
     borders = parse_xml(f'''
         <w:tcBorders {nsdecls("w")}>
@@ -208,6 +227,9 @@ def build_word_document(output_path):
 
     add_callout_box(doc, "The codebase is publicly available and version-controlled on GitHub at: https://github.com/imyashwanthsdp/omnibot.git", title="REPOSITORY LINK")
 
+    # EMBED SCREENSHOT 1: Chatbot UI
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot1_chatbot_ui.png"), "Live Web Interface of OmniBot Assistant Processing Math Calculations and Greetings (http://localhost:3000)")
+
     # -------------------------------------------------------------
     # SECTION 2: JENKINS & GITHUB CONFIGURATION
     # -------------------------------------------------------------
@@ -234,6 +256,9 @@ def build_word_document(output_path):
         r_st.bold = True
         r_st.font.color.rgb = RGBColor(15, 23, 42)
         sp.add_run(sdesc)
+
+    # EMBED SCREENSHOT 2: GitHub Webhook Setup
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot2_jenkins_webhook.png"), "Active GitHub Webhook Configuration pointing to Jenkins Payload URL with Response 200 OK")
 
     # -------------------------------------------------------------
     # SECTION 3: PIPELINE IMPLEMENTATION & STAGE BREAKDOWN
@@ -353,10 +378,19 @@ Successfully tagged general-chatbot-app:latest
 
 [Pipeline] stage (Result)
 STAGE 5: PIPELINE EXECUTION RESULT SUMMARY
-SUCCESS: Jenkins CI Pipeline Completed!
+SUCCESS: Jenkins CI Pipeline Completed!"
 Build Number: #1 | Docker Tag: general-chatbot-app:build-1
 Finished: SUCCESS"""
     add_code_block(doc, log_output)
+
+    # EMBED SCREENSHOT 3: Unit Test Suite TAP Output
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot3_unit_tests.png"), "Automated Unit Test Execution Logs (npm test) Showing 6/6 Tests Passing in TAP Format")
+
+    # EMBED SCREENSHOT 4: Docker Build CLI Output
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot4_docker_build.png"), "Docker Build and Tag Verification Output Listing general-chatbot-app:build-1 Image Tag")
+
+    # EMBED SCREENSHOT 5: Jenkins Pipeline Stage Execution View
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot5_jenkins_stageview.png"), "Jenkins Pipeline Stage Execution View Displaying 5 Green Passing Stages for Build #1")
 
     # -------------------------------------------------------------
     # SECTION 4: CI DEMONSTRATION (FEATURE MODIFICATION WORKFLOW)
@@ -387,6 +421,9 @@ $ git push origin main
 To https://github.com/imyashwanthsdp/omnibot.git
    eb3d32e..b992b71  main -> main"""
     add_code_block(doc, diff_code)
+
+    # EMBED SCREENSHOT 6: GitHub Commits History
+    add_image_with_caption(doc, os.path.join("screenshots", "screenshot6_github_commits.png"), "Git Commit History and Terminal Output Demonstrating Automated Push to GitHub Repository")
 
     add_styled_heading(doc, "4.2 Automated Jenkins Build #2 Execution Result", level=2)
     p = doc.add_paragraph(
