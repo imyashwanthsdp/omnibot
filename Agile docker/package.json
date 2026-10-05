@@ -1,0 +1,23 @@
+{
+  "name": "agile-jenkins-chatbot",
+  "version": "1.0.0",
+  "description": "Agile Sprint CI/CD Chatbot Application with Jenkins & Docker Pipeline",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js",
+    "lint": "node --check src/server.js src/chatbot.js"
+  },
+  "keywords": [
+    "chatbot",
+    "jenkins",
+    "ci-cd",
+    "docker",
+    "agile"
+  ],
+  "author": "Sprint CI Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
